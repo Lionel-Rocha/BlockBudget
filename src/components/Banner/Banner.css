@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
+.banner {
+    background-color: #000D26;
+    max-width: 100vw;
+    height: 100vh;
+    display: flex;
+    padding-left: 6%;
+    font-family: "Space Grotesk", sans-serif;
+    box-sizing: border-box;
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    max-height: 80%;
+    margin-top: 6%;
+    /*border: 1px solid white; /* Borda fina branca */
+}
+
+.title-container {
+    display: flex;
+    /*border: 1px solid blue; /* Borda fina azul */
+}
+
+.text-block {
+    color: #274DB7;
+}
+  
+.text-budget {
+    color: #D1D3E2;
+}
+
+.funcoes {
+    margin-top: auto;
+    margin-bottom: 0%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 6rem;
+    margin: 0 0 0 0;
+}
+
+h2 {
+    font-size: 3rem;
+    font-weight: lighter;
+    color: #D1D3E2;
+}
+
+p {
+    color: white;
+    font-size: 1.25rem;
+    margin: 32x 0 0 0;
+    line-height: 1.5;
+    text-align: left;
+    /*border: 1px solid red; /* Borda fina vermelha */
+}
+
+button {
+    width: 150px;
+    height: 55px;
+}
