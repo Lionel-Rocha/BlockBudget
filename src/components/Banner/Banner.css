@@ -1,71 +1,131 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
 
 .banner {
-    background-color: #000D26;
-    max-width: 100vw;
-    height: 100vh;
-    display: flex;
-    padding-left: 6%;
-    font-family: "Space Grotesk", sans-serif;
-    box-sizing: border-box;
+  background-color: #000d26;
+  max-width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  font-family: "Space Grotesk", sans-serif;
+  box-sizing: border-box;
+  padding: 5vh 0 5vh 5vw;
+  /* border: 1px solid red; */
+}
+
+.top-side > .title-container,
+.top-side > p,
+.top-side > .btnOrc,
+.text-container > .funcoes {
+  /* border: 1px solid rgb(234, 255, 0); */
 }
 
 .text-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 50%;
-    max-height: 80%;
-    margin-top: 6%;
-    /*border: 1px solid white; /* Borda fina branca */
-}
-
-.title-container {
-    display: flex;
-    /*border: 1px solid blue; /* Borda fina azul */
-}
-
-.text-block {
-    color: #274DB7;
-}
-  
-.text-budget {
-    color: #D1D3E2;
-}
-
-.funcoes {
-    margin-top: auto;
-    margin-bottom: 0%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-between;
+  max-width: 50vw;
+  /* border: 1px solid rgb(0, 255, 21); */
 }
 
 img {
-    max-width: 100%;
-    height: auto;
-    margin-left: auto;
-    margin-right: 0;
+  margin-left: auto;
+  margin-right: 0;
+  /* border: 1px solid rgb(0, 255, 21); */
 }
 
-h1 {
-    font-weight: bold;
-    font-size: 6rem;
-    margin: 0 0 0 0;
+.top-side {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-between;
+  /* border: 1px solid rgb(255, 0, 0); */
 }
 
-h2 {
-    font-size: 3rem;
-    font-weight: lighter;
-    color: #D1D3E2;
+.title-container {
+  display: flex;
+  flex-direction: rown;
+  /* border: 1px solid rgb(234, 255, 0); */
+}
+
+.text-block,
+.text-budget {
+  font-weight: bold;
+  margin: 0 0 0 0;
+  font-size: 5rem;
+}
+
+.text-block {
+  color: #274db7;
+}
+
+.text-budget {
+  color: #d1d3e2;
 }
 
 p {
-    color: white;
-    font-size: 1.25rem;
-    margin: 32x 0 0 0;
-    line-height: 1.5;
-    text-align: left;
-    /*border: 1px solid red; /* Borda fina vermelha */
+  color: white;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  text-align: left;
+  margin: 5vh 0 0 0;
+}
+
+.btnOrc {
+  margin: 5vh 0 0 0;
+}
+
+Link {
 }
 
 button {
-    width: 150px;
-    height: 55px;
+  height: 50px;
 }
+
+.funcoes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+h2 {
+  font-size: 3rem;
+  font-weight: lighter;
+  color: #d1d3e2;
+  margin: 0 0 0 0;
+  /* border: 1px solid red; */
+}
+
+/* Media Query for screens smaller than 768px */
+@media (max-width: 768px) {
+    .banner {
+      flex-direction: column;
+      align-items: center;
+      max-width: 100vw;
+      height: 100%;
+      padding: 5vh 0 5vh 5vw;
+    }
+  
+    .text-container {
+      order: 1;
+      max-width: 100%;
+      align-items: center;
+      margin-right: 5vh;
+    }
+  
+    img {
+      order: 2;
+      margin: 5vh 0 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+  
+    .funcoes {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 6vh;
+    }
+  }

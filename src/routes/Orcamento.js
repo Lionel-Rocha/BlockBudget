@@ -28,7 +28,12 @@ const Orcamento = () => {
                         ':hover': {backgroundColor: "#274DB7", color: "#D1D3E2" },
                         height: "60px"
                         }}
-                    size="large" variant='contained' endIcon={<FileDownloadRounded />}>DOWNLOAD</Button>
+                        size="large"
+                        variant='contained'
+                        endIcon={<FileDownloadRounded />}
+                    >
+                        DOWNLOAD
+                    </Button>
                 </div>                
                
                 <div className='bottom-right'>
@@ -40,7 +45,6 @@ const Orcamento = () => {
                             </div>
                         </div>                        
                     </div>
-
                     <IconButton sx={{
                         borderRadius: 3, 
                         fontWeight: "bolder",
@@ -49,8 +53,10 @@ const Orcamento = () => {
                         ':hover': {backgroundColor: "#274DB7", color: "#D1D3E2" },
                         height: "60px",
                         width: "70px"
-                        }} size="large">
-                        <ArrowForwardRounded fontSize='inherit'/></IconButton>   
+                        }} size="large"
+                    >
+                        <ArrowForwardRounded fontSize='inherit'/>
+                    </IconButton>
                 </div>
             </div>
         </div>

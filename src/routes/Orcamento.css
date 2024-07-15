@@ -15,7 +15,7 @@
 .orcamento > .tablePeca,
 .orcamento > .bottom {
     flex: 1 1 100%;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 .bottom {
@@ -30,7 +30,7 @@
 
 .bottom-right {
     display: flex;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 .displayTotal {
@@ -67,9 +67,7 @@
     margin: 0 20px 0 20px;
 }
 
-.titulo {
-
-}
+.titulo {}
 
 h1 {
     font-family: "Space Grotesk", sans-serif;
