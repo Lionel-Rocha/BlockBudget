@@ -5,6 +5,7 @@ import App from './App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './routes/Home';
 import Orcamento from './routes/Orcamento';
+import Painel from './routes/Painel';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "orcamento",
         element: <Orcamento />
+      },
+      {
+        path: "painel",
+        element: <Painel />
       }
     ]
   }
