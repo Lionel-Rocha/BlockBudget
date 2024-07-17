@@ -2,6 +2,10 @@ import "./Banner.css";
 import { Button, Link } from "@mui/material";
 
 const Banner = () => {
+  const handleClick = () => {
+    alert('Botão clicado!');
+  };
+
   return (
     <>
       <div className="banner">
@@ -32,6 +36,7 @@ const Banner = () => {
                   }}
                   size="large"
                   variant="contained"
+                  onClick={handleClick}
                 >
                   Orçamento
                 </Button>
