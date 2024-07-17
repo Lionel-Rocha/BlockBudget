@@ -6,8 +6,10 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper
+    Paper,
+    IconButton,
 } from '@mui/material';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 function createData(servico, descricao, preco, emissao, status, down) {
   return { servico, descricao, preco, emissao, status, down };
@@ -28,34 +30,51 @@ const rows = [
 
 const TableTotal = () => {
     return (<>
-        <TableContainer component={Paper} sx={{borderRadius: '12px'}}>
-      <Table sx={{ minWidth: 500 }} size="small" aria-label="Tabela de serviços">
-        <TableHead sx={{height: "50px", background: "#D9D9D9"}}>
-          <TableRow>
-            <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>Nº</TableCell>
-            <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>DESCRIÇÃO</TableCell>
-            <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>VALOR</TableCell>
-            <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>EMISSÃO</TableCell>
-            <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>STATUS</TableCell>
-            <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.servico}
-              sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}
-            >
-              <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}} component="th" scope="row">{row.servico}</TableCell>
-              <TableCell align="left" sx={{width: "55%", border: 2, borderColor: "#D9D9D9"}}>{row.descricao}</TableCell>
-              <TableCell align="left" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}}>{row.preco}</TableCell>
-              <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}}>{row.emissao}</TableCell>
-              <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}}>{row.status}</TableCell>
-              <TableCell align="center" sx={{width: "5%", border: 2, borderColor: "#D9D9D9"}}>{row.down}</TableCell>
+      <TableContainer component={Paper} sx={{borderRadius: '14px', maxHeight: 500}}>      
+        <Table hoverRow sx={{ minWidth: 500 }} aria-label="Tabela de exibicao" size='large'>          
+          <TableHead sx={{height: '50px', background: '#D9D9D9'}}>
+            <TableRow>
+              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>Nº</TableCell>
+              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>DESCRIÇÃO</TableCell>
+              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>VALOR</TableCell>
+              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>EMISSÃO</TableCell>
+              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>STATUS</TableCell>
+              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => {
+              return (
+              <TableRow hover 
+                role="checkbox"
+                tabIndex={-1}
+                key={row.servico}
+                sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}
+              >
+                <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}} component="th" scope="row">{row.servico}</TableCell>
+                <TableCell align="left" sx={{width: "55%", border: 2, borderColor: "#D9D9D9"}}>{row.descricao}</TableCell>
+                <TableCell align="left" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}}>{row.preco}</TableCell>
+                <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}}>{row.emissao}</TableCell>
+                <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9", fontWeight: "bold"}}>{row.status}</TableCell>
+                <TableCell align="center" sx={{width: "5%", border: 2, borderColor: "#D9D9D9", padding: "0"}}>
+                  <IconButton
+                    sx={{
+                      borderRadius: 10,
+                      fontWeight: "bolder",
+                      color: "#274DB7",
+                      ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                      width: "30px",
+                      height: "30px"
+                      }}
+                    size="large"
+                  >
+                    <FileDownloadOutlinedIcon fontSize="inherit" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            )})}
+          </TableBody>
+        </Table>
     </TableContainer>
     </>)
 }
