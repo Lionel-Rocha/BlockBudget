@@ -1,4 +1,3 @@
-// import "./Peca.css";
 import * as React from 'react';
 import {
     Table,
@@ -8,20 +7,11 @@ import {
     TableHead,
     TableRow,
     Paper,
-    Input,
-    Box
+    Input
 } from '@mui/material';
 
-const TablePeca = () => {
+const TablePeca = ({ parts, handlePartChange }) => {
   return (
-    <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 0 },
-      }}
-      noValidate
-      autoComplete="off"
-    >
     <TableContainer component={Paper} sx={{borderRadius: '12px'}}>
       <Table sx={{ minWidth: 500 }} size="small" aria-label="Tabela de serviços">
         <TableHead sx={{height: "50px", background: "#D9D9D9"}}>
@@ -32,23 +22,36 @@ const TablePeca = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-            <TableRow
-              sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "display: flex;px" }}
-            >
+          {parts.map((part, index) => (
+            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}>
               <TableCell align="center" sx={{width: "70%", border: 2, borderColor: "#D9D9D9"}} component="th" scope="row">
-                <Input fullWidth />
-              </TableCell>
-              <TableCell  align="center" sx={{width: "15%", border: 2, borderColor: "#D9D9D9"}}>
-                <Input fullWidth />
+                <Input 
+                  fullWidth 
+                  value={part.name} 
+                  onChange={(e) => handlePartChange(e, index, 'name')}
+                />
               </TableCell>
               <TableCell align="center" sx={{width: "15%", border: 2, borderColor: "#D9D9D9"}}>
-                <Input fullWidth />
+                <Input 
+                  fullWidth 
+                  type="number" 
+                  value={part.quantity} 
+                  onChange={(e) => handlePartChange(e, index, 'quantity')}
+                />
+              </TableCell>
+              <TableCell align="center" sx={{width: "15%", border: 2, borderColor: "#D9D9D9"}}>
+                <Input 
+                  fullWidth 
+                  type="number" 
+                  value={part.price} 
+                  onChange={(e) => handlePartChange(e, index, 'price')}
+                />
               </TableCell>
             </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
-    </Box>
   );
 }
 

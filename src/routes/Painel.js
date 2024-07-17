@@ -3,8 +3,12 @@ import TableTotal from "../components/Table/Total";
 import { Button } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-
 const Painel = () => {
+
+    const addOrcamentoBtn = () => {
+        alert('Botão clicado!');
+      };
+
     return (<>
         <div className="painel">
         <div className="tituloPainel">
@@ -23,6 +27,8 @@ const Painel = () => {
                     }}
                         size="large"
                         variant="contained"
+                        onClick={addOrcamentoBtn}
+                        href="./orcamento"
                         startIcon={<AddCircleIcon />}
                     >
                         Adicionar Orçamento

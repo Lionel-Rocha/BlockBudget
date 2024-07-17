@@ -7,20 +7,11 @@ import {
     TableHead,
     TableRow,
     Paper,
-    Input,
-    Box
+    Input
 } from '@mui/material';
 
-const TableServ = () => {
+const TableServ = ({ services, handleServiceChange }) => {
   return (
-    <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 0 },
-      }}
-      noValidate
-      autoComplete="off"
-    >
     <TableContainer component={Paper} sx={{borderRadius: '12px'}}>
       <Table sx={{ minWidth: 500 }} size="small" aria-label="Tabela de serviços">
         <TableHead sx={{height: "50px", background: "#D9D9D9"}}>
@@ -31,23 +22,35 @@ const TableServ = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-            <TableRow
-              sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}
-            >
+          {services.map((service, index) => (
+            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}>
               <TableCell align="center" sx={{width: "15%", border: 2, borderColor: "#D9D9D9"}} component="th" scope="row">
-                <Input fullWidth />
+                <Input 
+                  fullWidth 
+                  value={service.name} 
+                  onChange={(e) => handleServiceChange(e, index, 'name')}
+                />
               </TableCell>
               <TableCell align="left" sx={{width: "70%", border: 2, borderColor: "#D9D9D9"}}>
-              <Input fullWidth />
+                <Input 
+                  fullWidth 
+                  value={service.description} 
+                  onChange={(e) => handleServiceChange(e, index, 'description')}
+                />
               </TableCell>
               <TableCell align="center" sx={{width: "15%", border: 2, borderColor: "#D9D9D9"}}>
-              <Input fullWidth />
+                <Input 
+                  fullWidth 
+                  type="number" 
+                  value={service.price} 
+                  onChange={(e) => handleServiceChange(e, index, 'price')}
+                />
               </TableCell>
             </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
-    </Box>
   );
 }
 

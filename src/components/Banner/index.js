@@ -1,7 +1,8 @@
 import "./Banner.css";
-import { Button, Link } from "@mui/material";
+import { Button } from "@mui/material";
 
 const Banner = () => {
+  
   const handleClick = () => {
     alert('Botão clicado!');
   };
@@ -22,7 +23,6 @@ const Banner = () => {
               integridade e a privacidade dos dados.
             </p>
             <div className="btnOrc">
-              <Link href="./orcamento">
                 <Button
                   sx={{
                     borderRadius: 3,
@@ -37,10 +37,10 @@ const Banner = () => {
                   size="large"
                   variant="contained"
                   onClick={handleClick}
+                  href="./painel"
                 >
-                  Orçamento
+                  Autenticar
                 </Button>
-              </Link>
             </div>
           </div>
           <div className="funcoes">
