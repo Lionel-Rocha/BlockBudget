@@ -13,7 +13,7 @@ import {
 const TableServ = ({ services, handleServiceChange }) => {
   return (
     <TableContainer component={Paper} sx={{borderRadius: '12px'}}>
-      <Table sx={{ minWidth: 500 }} size="small" aria-label="Tabela de serviços">
+      <Table sx={{ minWidth: 500, maxHeight: 200 }} size="small" aria-label="Tabela de serviços">
         <TableHead sx={{height: "50px", background: "#D9D9D9"}}>
           <TableRow>
             <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>SERVIÇO</TableCell>

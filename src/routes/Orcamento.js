@@ -3,7 +3,12 @@ import "./Orcamento.css";
 import TableServ from "../components/Table/Serv";
 import TablePeca from "../components/Table/Peca";
 import { Button, IconButton } from "@mui/material";
-import { ArrowForwardRounded, FileDownloadRounded } from "@mui/icons-material";
+import { ArrowForwardRounded,
+          FileDownloadRounded,
+          Add,
+          Remove
+        } from "@mui/icons-material";
+
 
 const Orcamento = () => {
 
@@ -29,6 +34,28 @@ const Orcamento = () => {
     console.log('Peças:', parts);
   };
 
+  const addServiceRow = () => {
+    setServices([...services, { name: '', description: '', price: '' }]);
+  };
+
+  const removeServiceRow = () => {
+    if (services.length > 1) {
+      const newServices = services.slice(0, -1);
+      setServices(newServices);
+    }
+  };
+
+  const addPartRow = () => {
+    setParts([...parts, { name: '', description: '', price: '' }]);
+  };
+
+  const removePartRow = () => {
+    if (parts.length > 1) {
+      const newParts = parts.slice(0, -1);
+      setParts(newParts);
+    }
+  };
+
   // const avancarBtn = () => {
   //   alert('Botão clicado!');
   // };
@@ -46,9 +73,70 @@ const Orcamento = () => {
         <div className="table">
           <div className="tableServ">
             <TableServ services={services} handleServiceChange={handleServiceChange} />
+              <div className='btnContainer'>
+              <IconButton onClick={removeServiceRow} variant="contained" color="secondary" sx={{
+                borderRadius: 10,
+                fontWeight: "bolder",
+                color: "#274DB7",
+                backgroundColor: "#D1D3E2",
+                ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                width: "40px",
+                height: "40px",
+                marginBottom: "5px"               
+                }} 
+              size="large"             
+              >
+                  <Remove fontSize="inherit"/>
+              </IconButton>
+              <IconButton onClick={addServiceRow} variant="contained" color="primary" sx={{
+                borderRadius: 10,
+                fontWeight: "bolder",
+                color: "#274DB7",
+                backgroundColor: "#D1D3E2",
+                ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                width: "40px",
+                height: "40px",
+                marginBottom: "5px"
+                }}
+              size="large"
+              >
+                <Add fontSize="inherit"/>
+              </IconButton>
+              </div>
+
           </div>
           <div className="tablePeca">
             <TablePeca parts={parts} handlePartChange={handlePartChange} />
+            <div className='btnContainer'>
+              <IconButton onClick={removePartRow} variant="contained" color="secondary" sx={{
+                borderRadius: 10,
+                fontWeight: "bolder",
+                color: "#274DB7",
+                backgroundColor: "#D1D3E2",
+                ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                width: "40px",
+                height: "40px",
+                marginBottom: "5px"               
+                }} 
+              size="large"             
+              >
+                  <Remove fontSize="inherit"/>
+              </IconButton>
+              <IconButton onClick={addPartRow} variant="contained" color="primary" sx={{
+                borderRadius: 10,
+                fontWeight: "bolder",
+                color: "#274DB7",
+                backgroundColor: "#D1D3E2",
+                ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                width: "40px",
+                height: "40px",
+                marginBottom: "5px"
+                }}
+              size="large"
+              >
+                <Add fontSize="inherit"/>
+              </IconButton>
+              </div>
           </div>
         </div>
         <div className="bottom">
