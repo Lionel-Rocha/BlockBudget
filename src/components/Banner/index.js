@@ -1,10 +1,11 @@
 import "./Banner.css";
 import { Button } from "@mui/material";
-
+import {orquestrador_orcamentos_usuario} from '..\\src\\contrato\\interacao'
 const Banner = () => {
   
-  const handleClick = () => {
-    alert('Botão clicado!');
+  const handleClick = async () => {
+      await orquestrador_orcamentos_usuario();
+      window.location = '/painel';
   };
 
   return (
@@ -37,7 +38,7 @@ const Banner = () => {
                   size="large"
                   variant="contained"
                   onClick={handleClick}
-                  href="./painel"
+
                 >
                   Autenticar
                 </Button>

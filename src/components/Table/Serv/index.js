@@ -24,14 +24,14 @@ const TableServ = ({ services, handleServiceChange }) => {
         <TableBody>
           {services.map((service, index) => (
             <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}>
-              <TableCell align="center" sx={{width: "15%", border: 2, borderColor: "#D9D9D9"}} component="th" scope="row">
+              <TableCell align="center" sx={{width: "45%", border: 2, borderColor: "#D9D9D9"}} component="th" scope="row">
                 <Input 
                   fullWidth 
                   value={service.name} 
                   onChange={(e) => handleServiceChange(e, index, 'name')}
                 />
               </TableCell>
-              <TableCell align="left" sx={{width: "70%", border: 2, borderColor: "#D9D9D9"}}>
+              <TableCell align="left" sx={{width: "40%", border: 2, borderColor: "#D9D9D9"}}>
                 <Input 
                   fullWidth 
                   value={service.description} 

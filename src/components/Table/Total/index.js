@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Table,
     TableBody,
@@ -10,73 +10,137 @@ import {
     IconButton,
 } from '@mui/material';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-
-function createData(servico, descricao, preco, emissao, status, down) {
-  return { servico, descricao, preco, emissao, status, down };
-};
-
-const rows = [
-  createData('001', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry', 'R$ '+600.0, '15/07/2024', 'CONCLUÍDO'),
-  createData('002', 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s', 'R$ '+9000.0, '15/07/2024', 'CONCLUÍDO'),
-  createData('003', 'It has survived not only five centuries', 'R$ '+1600.0, '15/07/2024', 'CONCLUÍDO'),
-  createData('004', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry', 'R$ '+300.75, '15/07/2024', 'EM ABERTO'),
-  createData('005', 'It has survived not only five centuries', 'R$ '+165.90, '15/07/2024', 'EM ABERTO'),
-  createData('006', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry', 'R$ '+765.25, '15/07/2024', 'CONCLUÍDO'),
-  createData('007', 'Lorem Ipsum has been the industrys standard dummy text ever since the 1500s', 'R$ '+955.10, '15/07/2024', 'EM ABERTO'),
-  createData('008', 'It has survived not only five centuries', 'R$ '+7816.35, '15/07/2024', 'EM ABERTO'),
-  createData('009', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry', 'R$ '+3000.75, '15/07/2024', 'CONCLUÍDO'),
-  createData('010', 'It has survived not only five centuries', 'R$ '+1006.0, '15/07/2024', 'EM ABERTO'),
-];
-
-const TableTotal = () => {
-    return (<>
-      <TableContainer component={Paper} sx={{borderRadius: '14px', maxHeight: 500}}>      
-        <Table hoverRow sx={{ minWidth: 500 }} aria-label="Tabela de exibicao" size='large'>          
-          <TableHead sx={{height: '50px', background: '#D9D9D9'}}>
-            <TableRow>
-              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>Nº</TableCell>
-              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>DESCRIÇÃO</TableCell>
-              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>VALOR</TableCell>
-              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>EMISSÃO</TableCell>
-              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>STATUS</TableCell>
-              <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-              return (
-              <TableRow hover 
-                role="checkbox"
-                tabIndex={-1}
-                key={row.servico}
-                sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}
-              >
-                <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}} component="th" scope="row">{row.servico}</TableCell>
-                <TableCell align="left" sx={{width: "55%", border: 2, borderColor: "#D9D9D9"}}>{row.descricao}</TableCell>
-                <TableCell align="left" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}}>{row.preco}</TableCell>
-                <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9"}}>{row.emissao}</TableCell>
-                <TableCell align="center" sx={{width: "10%", border: 2, borderColor: "#D9D9D9", fontWeight: "bold"}}>{row.status}</TableCell>
-                <TableCell align="center" sx={{width: "5%", border: 2, borderColor: "#D9D9D9", padding: "0"}}>
-                  <IconButton
-                    sx={{
-                      borderRadius: 10,
-                      fontWeight: "bolder",
-                      color: "#274DB7",
-                      ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
-                      width: "30px",
-                      height: "30px"
-                      }}
-                    size="large"
-                  >
-                    <FileDownloadOutlinedIcon fontSize="inherit" />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            )})}
-          </TableBody>
-        </Table>
-    </TableContainer>
-    </>)
+import {orquestrador_orcamentos_usuario} from "../../../contrato/interacao";
+import {ethers} from "ethers";
+import * as XLSX from 'xlsx';
+let orcamento_download;
+function createData(servico, descricao, preco) {
+    return { servico, descricao, preco };
 }
+
+
+const coloca_em_excel = async () => {
+    let servicos = [];
+    let pecas = [];
+    orcamento_download = orcamento_download[0];
+
+    orcamento_download.services.forEach(service => {
+        servicos.push({
+            servico: service.name,
+            descricao: service.description,
+            preco: service.price
+        });
+    });
+
+    orcamento_download.parts.forEach(part => {
+        pecas.push({
+            peca: part.name,
+            quantidade: part.quantity,
+            preco: part.price
+        });
+    });
+
+
+    const ws = XLSX.utils.json_to_sheet(servicos);
+    const wp = XLSX.utils.json_to_sheet(pecas);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Serviços");
+    XLSX.utils.book_append_sheet(wb, wp, "Peças");
+
+    XLSX.writeFile(wb, "orcamentos.xlsx");
+
+}
+const TableTotal = () => {
+    const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+        function weiToEther(wei) {
+            let weiValue = wei.replace(/^0x/, '');
+            let weiDecimal = ethers.BigNumber.from('0x' + weiValue);
+            let etherValue = ethers.utils.formatUnits(weiDecimal, 'ether');
+
+            return parseFloat(etherValue);
+        }
+
+
+        async function loadOrcamentos() {
+            try {
+                let orcamentos = await orquestrador_orcamentos_usuario();
+                orcamento_download = orcamentos[0];
+                orcamentos = orcamentos[1];
+
+                const conteudo_rows = orcamentos;
+                const combinedRows = [];
+
+                conteudo_rows.forEach(item => {
+                    let valor = item[1]._hex;
+
+                    valor = weiToEther(valor);
+
+                    combinedRows.push(createData(
+                        item[0],
+                        item[2].toString(),
+                        valor
+                    ));
+                });
+
+                setRows(combinedRows);
+            } catch (error) {
+                console.error('Erro ao carregar orçamentos:', error);
+            }
+        }
+
+        loadOrcamentos();
+    }, []);
+
+
+
+    return (
+        <TableContainer component={Paper} sx={{ borderRadius: '14px', maxHeight: 500 }}>
+            <Table hoverRow sx={{ minWidth: 500 }} aria-label="Tabela de exibição" size='large'>
+                <TableHead sx={{ height: '50px', background: '#D9D9D9' }}>
+                    <TableRow>
+                        <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>Nº</TableCell>
+                        <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>PAGO</TableCell>
+                        <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>PREÇO</TableCell>
+                        <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row, index) => (
+                        <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={index}
+                            sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}
+                        >
+                            <TableCell align="center" sx={{ width: "20%", border: 2, borderColor: "#D9D9D9" }} component="th" scope="row">{row.servico}</TableCell>
+                            <TableCell align="left" sx={{ width: "40%", border: 2, borderColor: "#D9D9D9" }}>{row.descricao}</TableCell>
+                            <TableCell align="left" sx={{ width: "20%", border: 2, borderColor: "#D9D9D9" }}>{row.preco}</TableCell>
+                            <TableCell align="center" sx={{ width: "5%", border: 2, borderColor: "#D9D9D9", padding: "0" }}>
+                                <IconButton
+                                    sx={{
+                                        borderRadius: 10,
+                                        fontWeight: "bolder",
+                                        color: "#274DB7",
+                                        ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                                        width: "30px",
+                                        height: "30px"
+                                    }}
+                                    size="large"
+                                    onClick={coloca_em_excel}
+                                >
+                                    <FileDownloadOutlinedIcon fontSize="inherit"/>
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
+};
 
 export default TableTotal;
