@@ -81,6 +81,65 @@ export async function orquestrador_orcamentos_usuario(){
     return [orcamento, conteudo_rows];
 }
 
-export async function download_orcamentos(){
+export async function getOrcamentoById(id) {
+    let contratoInstance = await conectar_contrato();
+    try {
+        // Obtém o orçamento do contrato
+        const orcamento = await contratoInstance.getBudget(id); // Supondo que getBudget retorne detalhes completos
+        // Desestrutura a resposta
+        let [jsonData, precoWei, endereco, status] = orcamento;
 
+        // Converte o JSON de hexadecimal para string
+        const jsonString = ethers.utils.toUtf8String(jsonData);
+
+        // Parse o JSON para obter as partes e serviços
+        const parsedData = JSON.parse(jsonString);
+
+        precoWei = precoWei._hex;
+        // Converte o preço de Wei para Ether
+        const preco = ethers.utils.formatEther(precoWei.toString());
+
+
+        // Formata as partes
+        const partesFormatadas = parsedData.parts.map(part => ({
+            nome: part.name,
+            quantidade: part.quantity.toString(),
+            preco: part.price.toString()
+        }));
+
+        // Formata os serviços
+        const servicosFormatados = parsedData.services.map(service => ({
+            nome: service.name,
+            descricao: service.description,
+            preco: service.price.toString()
+        }));
+
+        return {
+            servico: servicosFormatados,
+            descricao: parsedData.description,
+            preco,
+            partes: partesFormatadas,
+            endereco,
+            status
+        };
+    } catch (error) {
+        console.error('Erro ao buscar orçamento:', error);
+        throw error;
+    }
+}
+
+export async function pagarOrcamento(id) {
+    let contratoInstance = await conectar_contrato();
+    const orcamento = await contratoInstance.getBudget(id);
+    let [jsonData, precoWei, endereco, status] = orcamento;
+    try {
+
+        const tx = await contratoInstance.payBudget(id,{
+            value: precoWei
+        });
+        await tx.wait();
+    } catch (error) {
+        console.error('Erro ao processar pagamento:', error);
+        throw error;
+    }
 }
