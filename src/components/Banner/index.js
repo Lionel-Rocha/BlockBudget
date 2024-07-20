@@ -1,6 +1,7 @@
 import "./Banner.css";
 import { Button } from "@mui/material";
-import {orquestrador_orcamentos_usuario} from '..\\src\\contrato\\interacao'
+//import {orquestrador_orcamentos_usuario} from '..\\src\\contrato\\interacao';
+import {orquestrador_orcamentos_usuario} from "../../contrato/interacao";
 const Banner = () => {
   
   const handleClick = async () => {

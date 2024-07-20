@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import "./Orcamento.css";
-import {orquestrador_novo_orcamento} from '..\\src\\contrato\\interacao'
+import {orquestrador_novo_orcamento} from '../../src/contrato/interacao';
+import { contrato } from '../../src/contrato/interacao';
 import TableServ from "../components/Table/Serv";
 import TablePeca from "../components/Table/Peca";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import {
   ArrowForwardRounded,
-  FileDownloadRounded,
   Add,
   Remove, ArrowBack
 } from "@mui/icons-material";
@@ -58,6 +58,12 @@ const Orcamento = () => {
     }
   };
 
+  const urlPagamento = () => {
+    contrato.conectar_contrato();
+    const url="./pagamento_orcamento/"+contrato.getBudgetLength();
+    return url;
+  }
+
   // const avancarBtn = () => {
   //   alert('Botão clicado!');
   // };
@@ -78,7 +84,7 @@ const Orcamento = () => {
                 width: "70px",
               }}
               size="large"
-              href="./painel"
+              href={urlPagamento}
               // onClick={formRef.current.submit()}
               type="submit"
           >
@@ -174,7 +180,7 @@ const Orcamento = () => {
                   width: "70px",
                 }}
                 size="large"
-                // href="./painel"
+                href={urlPagamento}
                 // onClick={formRef.current.submit()}
                 type="submit"
               >
