@@ -24,13 +24,13 @@ const ServView = ({ services }) => {
                     {services.map((service, index) => (
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}>
                             <TableCell align="center" sx={{ width: "45%", border: 2, borderColor: "#D9D9D9" }} component="th" scope="row">
-                                {service.name}
+                                {service.nome}
                             </TableCell>
                             <TableCell align="left" sx={{ width: "40%", border: 2, borderColor: "#D9D9D9" }}>
-                                {service.description}
+                                {service.descricao}
                             </TableCell>
                             <TableCell align="center" sx={{ width: "15%", border: 2, borderColor: "#D9D9D9" }}>
-                                {service.price}
+                                {service.preco}
                             </TableCell>
                         </TableRow>
                     ))}

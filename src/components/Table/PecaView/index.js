@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
     Table,
     TableBody,
@@ -9,7 +9,7 @@ import {
     Paper
 } from '@mui/material';
 
-const PecaView = ({ pecas }) => {
+const PecaView = ({ products }) => {
     return (
         <TableContainer component={Paper} sx={{ borderRadius: '12px' }}>
             <Table sx={{ minWidth: 500 }} size="small" aria-label="Tabela de peças">
@@ -21,19 +21,27 @@ const PecaView = ({ pecas }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {pecas.map((part, index) => (
-                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}>
-                            <TableCell align="center" sx={{ width: "70%", border: 2, borderColor: "#D9D9D9" }} component="th" scope="row">
-                                {part.name}
-                            </TableCell>
-                            <TableCell align="center" sx={{ width: "15%", border: 2, borderColor: "#D9D9D9" }}>
-                                {part.quantity}
-                            </TableCell>
-                            <TableCell align="center" sx={{ width: "15%", border: 2, borderColor: "#D9D9D9" }}>
-                                {part.price}
+                    {Array.isArray(products) && products.length > 0 ? (
+                        products.map((product, index) => (
+                            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}>
+                                <TableCell align="center" sx={{ width: "45%", border: 2, borderColor: "#D9D9D9" }} component="th" scope="row">
+                                    {product.nome}
+                                </TableCell>
+                                <TableCell align="left" sx={{ width: "40%", border: 2, borderColor: "#D9D9D9" }}>
+                                    {product.quantidade}
+                                </TableCell>
+                                <TableCell align="center" sx={{ width: "15%", border: 2, borderColor: "#D9D9D9" }}>
+                                    {product.preco}
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={3} align="center">
+                                Nenhum produto disponível
                             </TableCell>
                         </TableRow>
-                    ))}
+                    )}
                 </TableBody>
             </Table>
         </TableContainer>
