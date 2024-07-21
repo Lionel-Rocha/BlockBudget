@@ -4,7 +4,12 @@ import { ethers } from 'ethers';
 import {getOrcamentoById, pagarOrcamento} from "../contrato/interacao"; // Importe sua função para obter o orçamento específico
 import "./Orcamento.css";
 import ServView from "../components/Table/ServView";
-import TablePeca from "../components/Table/Peca";
+import PecaView from "../components/Table/PecaView";
+import { IconButton } from "@mui/material";
+import {
+    ArrowForwardRounded,
+    ArrowBack
+  } from "@mui/icons-material";
 
 const PagamentoOrcamento = () => {
     const { id } = useParams();
@@ -44,11 +49,15 @@ const PagamentoOrcamento = () => {
         return <div>Carregando...</div>;
     }
 
-    return (
-        <div>
-            <h1>Detalhes do Orçamento</h1>
-            <h2>Serviços</h2>
+    return (<>
+        <div className="orcamento">
+        <div className="titulo">
+          <h1>Detalhes do Orçamento</h1>
+        </div>
+            <div className="table">
+            <div className="tableServ">
             <ServView services={orcamento.servico} />
+            </div>
             <ul>
                 {orcamento.servico.map((service, index) => (
                     <li key={index}>
@@ -58,6 +67,9 @@ const PagamentoOrcamento = () => {
                     </li>
                 ))}
             </ul>
+            <div className="tablePeca">
+            <PecaView pecas={orcamento.partes} />
+            </div>
             <ul>
                 {orcamento.servico.map((service, index) => (
                     <li key={index}>
@@ -67,20 +79,50 @@ const PagamentoOrcamento = () => {
                     </li>
                 ))}
             </ul>
-            <h2>Peças</h2>
-            <ul>
+            </div>
                 {orcamento.partes.map((part, index) => (
                     <li key={index}>
                         <strong>Nome:</strong> {part.nome}<br />
                         <strong>Quantidade:</strong> {part.quantidade}<br />
                         <strong>Preço:</strong> {part.preco} ETH
                     </li>
-                ))}
-            </ul>
-            <p><strong>Preço Total:</strong> {orcamento.preco} ETH</p>
-            <button onClick={handlePagamento}>Pagar</button>
-        </div>
-    );
+                ))}   
+
+
+<div className="bottom">
+          <div className="bottom-left">
+          </div>
+          <div className="bottom-right">
+            <div className="display">
+              <div className="textoTotal">
+                  <h2>TOTAL:</h2>
+              </div>
+              <div className="displayTotal">
+                  <p>{orcamento.preco} ETH</p>
+              </div>
+            </div>
+              <IconButton
+                sx={{
+                  borderRadius: 3,
+                  fontWeight: "bolder",
+                  backgroundColor: "#D9D9D9",
+                  color: "#274DB7",
+                  ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                  height: "60px",
+                  width: "70px",
+                }}
+                size="large"
+                // href="./painel"
+                onClick={handlePagamento}
+                // type="submit"
+              >
+                <ArrowForwardRounded fontSize="inherit" />
+              </IconButton>
+          </div>
+          </div>
+          </div>
+
+    </>);
 };
 
 export default PagamentoOrcamento;

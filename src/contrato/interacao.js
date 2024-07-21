@@ -53,15 +53,18 @@ export async function orquestrador_novo_orcamento(orcamento) {
 
     let valor = 0;
     let contrato = await conectar_contrato();
-    for (let i = 0; i < orcamento.services.length; i++) {
-        valor = valor + parseFloat(orcamento.services[i].price);
+    
+    if (orcamento.services[0].name !== ""){
+        for (let i = 0; i < orcamento.services.length; i++) {
+            valor = valor + parseFloat(orcamento.services[i].price);
+        }
     }
-
-    if (orcamento.parts.length > 0 ){
+    
+    if (orcamento.parts[0].name !== ""){
         for (let i = 0; i < orcamento.parts.length; i++) {
             valor = valor + parseFloat(orcamento.parts[i].price);
         }
-    } 
+    }
 
     const jsonData = JSON.stringify(orcamento);
 
