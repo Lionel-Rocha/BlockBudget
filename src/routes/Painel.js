@@ -4,14 +4,8 @@ import { Button } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import {useEffect} from "react";
-import {orquestrador_orcamentos_usuario} from "../contrato/interacao";
+import {conectar_contrato, obtem_orcamentos_usuario, orquestrador_orcamentos_usuario} from "../contrato/interacao";
 const Painel = () => {
-
-
-
-    const addOrcamentoBtn = () => {
-        alert('Botão clicado!');
-      };
 
     return (<>
         <div className="painel">
@@ -31,7 +25,6 @@ const Painel = () => {
                     }}
                         size="large"
                         variant="contained"
-                        onClick={addOrcamentoBtn}
                         href="./orcamento"
                         startIcon={<AddCircleIcon />}
                     >

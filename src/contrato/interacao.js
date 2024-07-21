@@ -4,7 +4,7 @@ const endereco_contrato = "0xA7efc572c81bCc607a0fee39a5Ca7612735d02F8";
 const json = require('./contratoOrcamento.json');
 const abi = json.abi;
 
-async function conectar_contrato(){
+export async function conectar_contrato(){
     if (window.ethereum){
 
         try {
@@ -24,27 +24,30 @@ async function conectar_contrato(){
     }
 }
 
-async function obtem_orcamentos_usuario(contrato){
+export async function obtem_orcamentos_usuario(contrato){
+
     let signer = await contrato.signer;
     let endereco = await signer.getAddress();
-    let id_orcamentos = await contrato.getBudgetsByAddress(endereco);
+    try{
+        let id_orcamentos = await contrato.getBudgetsByAddress(endereco);
 
 
-    let orcamentos = [];
-    let conteudo_rows = [];
-    for (let i = 0; i < id_orcamentos.length; i++){
-        let orcamento = await contrato.getBudget(id_orcamentos[i]);
-        const jsonData = ethers.utils.toUtf8String(orcamento[0]);
-        const dadosOrcamento = JSON.parse(jsonData);
-        orcamentos.push(dadosOrcamento);
-        conteudo_rows.push([i, orcamento[1], orcamento[3]])
+        let orcamentos = [];
+        let conteudo_rows = [];
+        for (let i = 0; i < id_orcamentos.length; i++){
+            let orcamento = await contrato.getBudget(id_orcamentos[i]);
+            const jsonData = ethers.utils.toUtf8String(orcamento[0]);
+            const dadosOrcamento = JSON.parse(jsonData);
+            orcamentos.push(dadosOrcamento);
+            conteudo_rows.push([i, orcamento[1], orcamento[3]])
+        }
+        return [orcamentos, conteudo_rows];
+    } catch (e) {
+        return [];
     }
-    return [orcamentos, conteudo_rows];
-}
-
-async function envia_orcamento_contrato(){
 
 }
+
 
 export async function orquestrador_novo_orcamento(orcamento) {
 
@@ -54,10 +57,11 @@ export async function orquestrador_novo_orcamento(orcamento) {
         valor = valor + parseFloat(orcamento.services[i].price);
     }
 
-    for (let i = 0; i < orcamento.parts.length; i++) {
-        valor = valor + parseFloat(orcamento.parts[i].price);
-    }
-
+    if (orcamento.parts.length > 0 ){
+        for (let i = 0; i < orcamento.parts.length; i++) {
+            valor = valor + parseFloat(orcamento.parts[i].price);
+        }
+    } 
 
     const jsonData = JSON.stringify(orcamento);
 

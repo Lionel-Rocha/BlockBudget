@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "./Orcamento.css";
-import {orquestrador_novo_orcamento} from '../../src/contrato/interacao';
-import { contrato } from '../../src/contrato/interacao';
+import { orquestrador_novo_orcamento, conectar_contrato } from '../../src/contrato/interacao';
+import { obtem_orcamentos_usuario } from '../../src/contrato/interacao';
 import TableServ from "../components/Table/Serv";
 import TablePeca from "../components/Table/Peca";
 import { IconButton } from "@mui/material";
@@ -12,8 +12,22 @@ import {
 } from "@mui/icons-material";
 
 
+async function redirecionaParaOrcamento (){
+  let contrato = await conectar_contrato();
+  let signer = await contrato.signer;
+  let endereco = await signer.getAddress();
+  console.log(endereco);
+  let orcamentos_usuario = await contrato.getBudgetsByAddress(endereco);
+  let restante_url = (orcamentos_usuario[orcamentos_usuario.length - 1]).toString();
+  console.log(restante_url);
+  let url = "/pagamento_orcamento/"+restante_url;
+  window.location = url;
+}
+
 
 const Orcamento = () => {
+
+
 
   const [services, setServices] = useState([{ name: '', description: '', price: '' }]);
   const [parts, setParts] = useState([{ name: '', quantity: '', price: '' }]);
@@ -34,6 +48,7 @@ const Orcamento = () => {
     e.preventDefault();
     let orcamento = {services, parts}
     await orquestrador_novo_orcamento(orcamento);
+    redirecionaParaOrcamento();
   };
 
   const addServiceRow = () => {
@@ -58,12 +73,6 @@ const Orcamento = () => {
     }
   };
 
-  const urlPagamento = () => {
-    contrato.conectar_contrato();
-    const url="./pagamento_orcamento/"+contrato.getBudgetLength();
-    return url;
-  }
-
   // const avancarBtn = () => {
   //   alert('Botão clicado!');
   // };
@@ -73,23 +82,6 @@ const Orcamento = () => {
     <form onSubmit={handleSubmit}>
       <div className="orcamento">
         <div className="titulo">
-          <IconButton
-              sx={{
-                borderRadius: 3,
-                fontWeight: "bolder",
-                backgroundColor: "#D9D9D9",
-                color: "#274DB7",
-                ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
-                height: "60px",
-                width: "70px",
-              }}
-              size="large"
-              href={urlPagamento}
-              // onClick={formRef.current.submit()}
-              type="submit"
-          >
-            <ArrowBack fontSize="inherit" />
-          </IconButton>
           <h1>NOVO ORÇAMENTO</h1>
         </div>
         <div className="table">
@@ -125,7 +117,6 @@ const Orcamento = () => {
                 <Add fontSize="inherit"/>
               </IconButton>
               </div>
-
           </div>
           <div className="tablePeca">
             <TablePeca parts={parts} handlePartChange={handlePartChange} />
@@ -180,7 +171,6 @@ const Orcamento = () => {
                   width: "70px",
                 }}
                 size="large"
-                href={urlPagamento}
                 // onClick={formRef.current.submit()}
                 type="submit"
               >

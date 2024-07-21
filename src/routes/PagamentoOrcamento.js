@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import {getOrcamentoById, pagarOrcamento} from "../contrato/interacao"; // Importe sua função para obter o orçamento específico
+import "./Orcamento.css";
+import ServView from "../components/Table/ServView";
+import TablePeca from "../components/Table/Peca";
 
 const PagamentoOrcamento = () => {
     const { id } = useParams();
@@ -45,6 +48,16 @@ const PagamentoOrcamento = () => {
         <div>
             <h1>Detalhes do Orçamento</h1>
             <h2>Serviços</h2>
+            <ServView services={orcamento.servico} />
+            <ul>
+                {orcamento.servico.map((service, index) => (
+                    <li key={index}>
+                        <strong>Nome:</strong> {service.nome}<br />
+                        <strong>Descrição:</strong> {service.descricao}<br />
+                        <strong>Preço:</strong> {service.preco} ETH
+                    </li>
+                ))}
+            </ul>
             <ul>
                 {orcamento.servico.map((service, index) => (
                     <li key={index}>
