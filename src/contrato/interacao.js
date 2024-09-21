@@ -1,6 +1,4 @@
 import {ethers} from 'ethers'
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import {mostrarToastErro, mostrarToastProcessando, mostrarToastSucesso} from "../routes/alerts";
 
 
@@ -75,10 +73,6 @@ export async function orquestrador_novo_orcamento(orcamento) {
 
     const jsonData = JSON.stringify(orcamento);
     const etherValue = ethers.utils.parseUnits(valor.toString(), 'ether');
-    console.log("Valor em wei:", etherValue.toString());
-
-    // Mostra a notificação de que o orçamento está sendo processado
-    mostrarToastProcessando();
 
     try {
         const tx = await contrato.storeBudget(
@@ -88,24 +82,18 @@ export async function orquestrador_novo_orcamento(orcamento) {
 
         await tx.wait();
 
-        // Mostra a notificação de sucesso
-        mostrarToastSucesso();
-        console.log("Orçamento armazenado!");
+        alert("Orçamento armazenado com sucesso!");
 
     } catch (error) {
-        // Mostra a notificação de erro com a mensagem detalhada
-        mostrarToastErro(error.message);
-        console.error("Erro na transação:", error);
+        alert("Erro na transação.");
     }
 }
 
 export async function orquestrador_orcamentos_usuario(){
     let contrato = await conectar_contrato();
-    console.log(contrato);
     let dados = await obtem_orcamentos_usuario(contrato);
     let conteudo_rows = dados[1];
     let orcamento = dados[0];
-    console.log(orcamento,conteudo_rows);
     return [orcamento, conteudo_rows];
 }
 
@@ -166,13 +154,3 @@ export async function pagarOrcamento(id) {
         throw error;
     }
 }
-
-const App = () => {
-    return (
-        <div>
-            <ToastContainer />
-        </div>
-    );
-};
-
-export default App;

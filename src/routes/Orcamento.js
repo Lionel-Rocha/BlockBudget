@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import "./Orcamento.css";
-import {conectar_contrato, orquestrador_novo_orcamento} from '../../src/contrato/interacao';
+import {conectar_contrato, orquestrador_novo_orcamento} from '../contrato/interacao';
 import TableServ from "../components/Table/Serv";
 import TablePeca from "../components/Table/Peca";
 import {IconButton} from "@mui/material";
