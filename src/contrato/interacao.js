@@ -1,7 +1,11 @@
 import {ethers} from 'ethers'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {mostrarToastErro, mostrarToastProcessando, mostrarToastSucesso} from "../routes/alerts";
 
-const endereco_contrato = "0xA7efc572c81bCc607a0fee39a5Ca7612735d02F8";
-const json = require('./contratoOrcamento.json');
+
+const endereco_contrato = "0xacCf0c853B4A823E0cfF67903000ACA35564Ae27";
+const json = require('./blockbudget.json');
 const abi = json.abi;
 
 export async function conectar_contrato(){
@@ -32,89 +36,101 @@ export async function obtem_orcamentos_usuario(contrato){
         let id_orcamentos = await contrato.getBudgetsByAddress(endereco);
 
 
+        console.log(id_orcamentos.length);
+
         let orcamentos = [];
         let conteudo_rows = [];
         for (let i = 0; i < id_orcamentos.length; i++){
+            console.log(i);
             let orcamento = await contrato.getBudget(id_orcamentos[i]);
+
             const jsonData = ethers.utils.toUtf8String(orcamento[0]);
             const dadosOrcamento = JSON.parse(jsonData);
             orcamentos.push(dadosOrcamento);
-            conteudo_rows.push([i, orcamento[1], orcamento[3]])
+            conteudo_rows.push([parseInt(id_orcamentos[i]._hex), orcamento[1], orcamento[3]])
         }
         return [orcamentos, conteudo_rows];
     } catch (e) {
+        console.log(e);
         return [];
     }
 
 }
 
-
 export async function orquestrador_novo_orcamento(orcamento) {
-
     let valor = 0;
     let contrato = await conectar_contrato();
-    
-    if (orcamento.services[0].name !== ""){
+
+    if (orcamento.services[0].name !== "") {
         for (let i = 0; i < orcamento.services.length; i++) {
             valor = valor + parseFloat(orcamento.services[i].price);
         }
     }
-    
-    if (orcamento.parts[0].name !== ""){
+
+    if (orcamento.parts[0].name !== "") {
         for (let i = 0; i < orcamento.parts.length; i++) {
             valor = valor + parseFloat(orcamento.parts[i].price);
         }
     }
 
     const jsonData = JSON.stringify(orcamento);
-
     const etherValue = ethers.utils.parseUnits(valor.toString(), 'ether');
     console.log("Valor em wei:", etherValue.toString());
 
-    const tx = await contrato.storeBudget(
-        ethers.utils.toUtf8Bytes(jsonData),
-        etherValue
-    );
-    await tx.wait();
-    console.log("Orçamento armazenado!");
+    // Mostra a notificação de que o orçamento está sendo processado
+    mostrarToastProcessando();
+
+    try {
+        const tx = await contrato.storeBudget(
+            ethers.utils.toUtf8Bytes(jsonData),
+            etherValue
+        );
+
+        await tx.wait();
+
+        // Mostra a notificação de sucesso
+        mostrarToastSucesso();
+        console.log("Orçamento armazenado!");
+
+    } catch (error) {
+        // Mostra a notificação de erro com a mensagem detalhada
+        mostrarToastErro(error.message);
+        console.error("Erro na transação:", error);
+    }
 }
 
 export async function orquestrador_orcamentos_usuario(){
     let contrato = await conectar_contrato();
+    console.log(contrato);
     let dados = await obtem_orcamentos_usuario(contrato);
     let conteudo_rows = dados[1];
     let orcamento = dados[0];
-
+    console.log(orcamento,conteudo_rows);
     return [orcamento, conteudo_rows];
 }
 
 export async function getOrcamentoById(id) {
     let contratoInstance = await conectar_contrato();
+
     try {
-        // Obtém o orçamento do contrato
+
         const orcamento = await contratoInstance.getBudget(id); // Supondo que getBudget retorne detalhes completos
-        // Desestrutura a resposta
         let [jsonData, precoWei, endereco, status] = orcamento;
 
-        // Converte o JSON de hexadecimal para string
         const jsonString = ethers.utils.toUtf8String(jsonData);
 
-        // Parse o JSON para obter as partes e serviços
         const parsedData = JSON.parse(jsonString);
 
         precoWei = precoWei._hex;
-        // Converte o preço de Wei para Ether
         const preco = ethers.utils.formatEther(precoWei.toString());
 
 
-        // Formata as partes
         const partesFormatadas = parsedData.parts.map(part => ({
             nome: part.name,
             quantidade: part.quantity.toString(),
             preco: part.price.toString()
         }));
 
-        // Formata os serviços
         const servicosFormatados = parsedData.services.map(service => ({
             nome: service.name,
             descricao: service.description,
@@ -150,3 +166,13 @@ export async function pagarOrcamento(id) {
         throw error;
     }
 }
+
+const App = () => {
+    return (
+        <div>
+            <ToastContainer />
+        </div>
+    );
+};
+
+export default App;

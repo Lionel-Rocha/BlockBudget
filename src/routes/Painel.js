@@ -3,8 +3,6 @@ import TableTotal from "../components/Table/Total";
 import { Button } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-import {useEffect} from "react";
-import {conectar_contrato, obtem_orcamentos_usuario, orquestrador_orcamentos_usuario} from "../contrato/interacao";
 const Painel = () => {
 
     return (<>

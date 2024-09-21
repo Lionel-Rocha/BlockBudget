@@ -7,7 +7,7 @@ import {
     TableHead,
     TableRow,
     Paper,
-    IconButton, Button,
+    IconButton,
 } from '@mui/material';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import {
@@ -15,14 +15,15 @@ import {
     obtem_orcamentos_usuario,
     orquestrador_orcamentos_usuario
 } from "../../../contrato/interacao";
-import {ethers} from "ethers";
+import { ethers } from "ethers";
+import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
+
 let orcamento_download;
-function createData(servico, descricao, preco) {
-    return { servico, descricao, preco };
+
+function createData(id, pago, preco) {
+    return { id, pago, preco };
 }
-
-
 
 const coloca_em_excel = async () => {
     let servicos = [];
@@ -45,7 +46,6 @@ const coloca_em_excel = async () => {
         });
     });
 
-
     const ws = XLSX.utils.json_to_sheet(servicos);
     const wp = XLSX.utils.json_to_sheet(pecas);
 
@@ -54,10 +54,11 @@ const coloca_em_excel = async () => {
     XLSX.utils.book_append_sheet(wb, wp, "Peças");
 
     XLSX.writeFile(wb, "orcamentos.xlsx");
+};
 
-}
 const TableTotal = () => {
     const [rows, setRows] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         function weiToEther(wei) {
@@ -67,7 +68,6 @@ const TableTotal = () => {
 
             return parseFloat(etherValue);
         }
-
 
         async function loadOrcamentos() {
             try {
@@ -83,9 +83,15 @@ const TableTotal = () => {
 
                     valor = weiToEther(valor);
 
+                    if (item[2] === true) {
+                        item[2] = "Sim";
+                    } else {
+                        item[2] = "Não";
+                    }
+
                     combinedRows.push(createData(
                         item[0],
-                        item[2].toString(),
+                        item[2],
                         valor
                     ));
                 });
@@ -99,7 +105,9 @@ const TableTotal = () => {
         loadOrcamentos();
     }, []);
 
-
+    const handleRowClick = (id) => {
+        navigate(`/pagamento_orcamento/${id}`);
+    };
 
     return (
         <TableContainer component={Paper} sx={{ borderRadius: '14px', maxHeight: 500 }}>
@@ -108,7 +116,7 @@ const TableTotal = () => {
                     <TableRow>
                         <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>Nº</TableCell>
                         <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>PAGO</TableCell>
-                        <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>PREÇO</TableCell>
+                        <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}>PREÇO (LAC)</TableCell>
                         <TableCell align="center" sx={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1rem', fontWeight: 900 }}></TableCell>
                     </TableRow>
                 </TableHead>
@@ -119,11 +127,16 @@ const TableTotal = () => {
                             role="checkbox"
                             tabIndex={-1}
                             key={index}
-                            sx={{ '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" }, height: "35px" }}
+                            onClick={() => handleRowClick(row.id)}
+                            sx={{
+                                '&:last-child td, &:last-child th': { border: 2, borderColor: "#D9D9D9" },
+                                height: "35px",
+                                cursor: 'pointer'
+                            }}
                         >
-                            <TableCell align="center" sx={{ width: "20%", border: 2, borderColor: "#D9D9D9" }} component="th" scope="row">{row.servico}</TableCell>
-                            <TableCell align="left" sx={{ width: "40%", border: 2, borderColor: "#D9D9D9" }}>{row.descricao}</TableCell>
-                            <TableCell align="left" sx={{ width: "20%", border: 2, borderColor: "#D9D9D9" }}>{row.preco}</TableCell>
+                            <TableCell align="center" sx={{ width: "20%", border: 2, borderColor: "#D9D9D9" }} component="th" scope="row">{row.id}</TableCell>
+                            <TableCell align="center" sx={{ width: "40%", border: 2, borderColor: "#D9D9D9" }}>{row.pago}</TableCell>
+                            <TableCell align="center" sx={{ width: "20%", border: 2, borderColor: "#D9D9D9" }}>{row.preco}</TableCell>
                             <TableCell align="center" sx={{ width: "5%", border: 2, borderColor: "#D9D9D9", padding: "0" }}>
                                 <IconButton
                                     sx={{
@@ -135,7 +148,10 @@ const TableTotal = () => {
                                         height: "30px"
                                     }}
                                     size="large"
-                                    onClick={coloca_em_excel}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        coloca_em_excel();
+                                    }}
                                 >
                                     <FileDownloadOutlinedIcon fontSize="inherit"/>
                                 </IconButton>

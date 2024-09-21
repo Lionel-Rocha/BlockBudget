@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import "./Orcamento.css";
-import { orquestrador_novo_orcamento, conectar_contrato } from '../../src/contrato/interacao';
-import { obtem_orcamentos_usuario } from '../../src/contrato/interacao';
+import {conectar_contrato, orquestrador_novo_orcamento} from '../../src/contrato/interacao';
 import TableServ from "../components/Table/Serv";
 import TablePeca from "../components/Table/Peca";
-import { IconButton } from "@mui/material";
-import {
-  ArrowForwardRounded,
-  Add,
-  Remove, ArrowBack
-} from "@mui/icons-material";
+import {IconButton} from "@mui/material";
+import {Add, ArrowForwardRounded, Remove} from "@mui/icons-material";
 
 
 async function redirecionaParaOrcamento (){
@@ -20,8 +15,7 @@ async function redirecionaParaOrcamento (){
   let orcamentos_usuario = await contrato.getBudgetsByAddress(endereco);
   let restante_url = (orcamentos_usuario[orcamentos_usuario.length - 1]).toString();
   console.log(restante_url);
-  let url = "/pagamento_orcamento/"+restante_url;
-  window.location = url;
+  window.location = "/pagamento_orcamento/" + restante_url;
 }
 
 
@@ -72,11 +66,6 @@ const Orcamento = () => {
       setParts(newParts);
     }
   };
-
-  // const avancarBtn = () => {
-  //   alert('Botão clicado!');
-  // };
-
 
   return (
     <form onSubmit={handleSubmit}>

@@ -4,19 +4,22 @@ import { getOrcamentoById, pagarOrcamento } from "../contrato/interacao"; // Imp
 import ServView from "../components/Table/ServView";
 import PecaView from "../components/Table/PecaView";
 import "./Orcamento.css";
-import {ArrowForwardRounded} from "@mui/icons-material";
+import {ArrowBack, ArrowForwardRounded} from "@mui/icons-material";
 import {IconButton} from "@mui/material";
+import OrcamentoNotFound from "./noExistence";
 const PagamentoOrcamento = () => {
     const { id } = useParams();
     const [orcamento, setOrcamento] = useState(null);
 
+    const voltar = () => {
+
+        window.location = "../painel"
+    }
+
     useEffect(() => {
         async function loadOrcamento() {
             try {
-                // Obtém o orçamento específico pelo ID
                 const dadosOrcamento = await getOrcamentoById(id);
-                // console.log(dadosOrcamento);
-
                 setOrcamento(dadosOrcamento);
                 console.log(orcamento)
             } catch (error) {
@@ -37,7 +40,7 @@ const PagamentoOrcamento = () => {
     };
 
     if (!orcamento) {
-        return <div>Carregando...</div>;
+        return <OrcamentoNotFound />;
     }
 
     return (<>
@@ -57,6 +60,21 @@ const PagamentoOrcamento = () => {
 
             <div className="bottom">
                 <div className="bottom-left">
+                    <IconButton sx={{
+                        borderRadius: 3,
+                        fontWeight: "bolder",
+                        backgroundColor: "#D9D9D9",
+                        color: "#274DB7",
+                        ":hover": { backgroundColor: "#274DB7", color: "#D1D3E2" },
+                        height: "60px",
+                        width: "70px",
+                    }}
+                        size="large"
+                        onClick={voltar}
+                    >
+                        <ArrowBack fontSize="inherit"></ArrowBack>
+                    </IconButton>
+
                 </div>
                 <div className="bottom-right">
                     <div className="display">
@@ -64,7 +82,7 @@ const PagamentoOrcamento = () => {
                             <h2>TOTAL:</h2>
                         </div>
                         <div className="displayTotal">
-                            <p>{orcamento.preco} ETH</p>
+                            <p>{orcamento.preco} LAC</p>
                         </div>
                     </div>
                     <IconButton
